@@ -8,11 +8,25 @@ on:
 
 jobs:
 
-  build:
-
+  build-test:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        volumes:
+          - ./data:/docker-entrypoint-initdb.d/:ro
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
 
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - run: docker-compose up -d --build
+    - run: sleep 10
+    - run: docker-compose exec app python -m pytest tests
+    - run: docker-compose down
