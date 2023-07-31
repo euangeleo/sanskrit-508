@@ -28,5 +28,5 @@ jobs:
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
     - run: docker-compose up -d --build
     - run: sleep 10
-    - run: docker-compose exec app python -m pytest tests
+    - run: docker-compose exec -T app python -m pytest tests
     - run: docker-compose down
