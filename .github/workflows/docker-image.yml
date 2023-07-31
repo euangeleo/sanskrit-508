@@ -30,7 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sanskrit-508:latest
+      run: docker build . --file Dockerfile --tag ling-508/sanskrit-508:latest
     - run: docker-compose up -d --build
     - run: sleep 10
     - run: docker-compose exec -T app python -m pytest tests
